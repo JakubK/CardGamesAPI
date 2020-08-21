@@ -1,37 +1,39 @@
-using System;
 using System.Collections.Generic;
-using System.Linq;
+using CardGamesAPI.Data;
 using CardGamesAPI.Exceptions;
 using CardGamesAPI.Models;
+using LiteDB;
 
 namespace CardGamesAPI.Services
 {
   public class DeckService
   {
     List<Deck> decks;
-    public DeckService()
+    LiteDatabase db;
+    public DeckService(ILiteDbContext context)
     {
       decks = new List<Deck>();
+      db = context.Database;
     }
     public IEnumerable<Deck> GetDecks()
-    {
-      return decks ?? Enumerable.Empty<Deck>();
+    {      
+      return db.GetCollection<Deck>().FindAll();
     }
 
     public void Insert(Deck deck)
     {
-      decks.Add(deck);
+      db.GetCollection<Deck>().Insert(deck);
     }
 
     public Deck GetDeck(string deckHash)
     {
-      return decks.SingleOrDefault(x => x.Hash == deckHash) 
+      return db.GetCollection<Deck>().FindOne(x => x.Hash == deckHash)
         ?? throw new DeckNotFoundException();
     }
 
     public void Remove(string deckHash)
     {
-      decks.Remove(GetDeck(deckHash));
+      db.GetCollection<Deck>().Delete(GetDeck(deckHash).Id);
     }
   }
 }
