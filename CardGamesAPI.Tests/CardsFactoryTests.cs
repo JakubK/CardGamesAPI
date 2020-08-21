@@ -59,7 +59,7 @@ namespace CardGamesAPI.Tests
 
         [TestCase(39,Color.Diamonds)]
         [TestCase(51,Color.Diamonds)]
-        public void Generate_AssignsColorProperly(int index, Color desiredColor)
+        public void Generate_AssignsColorsProperly(int index, Color desiredColor)
         {
             var factory = new CardsFactory();
             var cards = factory.Generate();

@@ -5,7 +5,7 @@ using CardGamesAPI.Models;
 
 namespace CardGamesAPI.Services
 {
-    public class CardsFactory
+    public class CardsFactory : ICardsFactory
     {
         string[] presets;
         public CardsFactory()
