@@ -60,7 +60,7 @@ namespace CardGamesAPI.Tests
         }
 
         [Test]
-        public void RemoveDeck_WhenDeckFound_RemovesIt()
+        public void Remove_WhenDeckFound_RemovesIt()
         {
             var deckHash = "deckHash";
             var deckRepository = new DeckRepository(DbContextFactory.Create());
@@ -72,11 +72,35 @@ namespace CardGamesAPI.Tests
         }
 
         [Test]
-        public void RemoveDeck_WhenDeckNotFound_Throws()
+        public void Remove_WhenDeckNotFound_Throws()
         {
             var deckHash = "deckHash";
             var deckRepository = new DeckRepository(DbContextFactory.Create());
             Assert.Throws<DeckNotFoundException>(() => deckRepository.Remove(deckHash));
+        }
+
+        [Test]
+        public void Update_WhenDeckNotFound_Throws()
+        {
+            var deckHash = "deckHash";
+            var deckRepository = new DeckRepository(DbContextFactory.Create());
+            Assert.Throws<DeckNotFoundException>(() => deckRepository.Update(deckRepository.GetDeck(deckHash)));
+        }
+
+        [Test]
+        public void Update_WhenDeckFound_Updates()
+        {
+            var deckHash = "deckHash";
+            var deckRepository = new DeckRepository(DbContextFactory.Create());
+            deckRepository.Insert(new Deck{
+                Hash = deckHash
+            });
+
+            var deck = deckRepository.GetDeck(deckHash);
+            deck.Remaining = 21;
+            deckRepository.Update(deck);
+
+            Assert.That(deckRepository.GetDeck(deckHash).Remaining == 21);
         }
     }
 }

@@ -33,5 +33,10 @@ namespace CardGamesAPI.Repositories
         {
             db.GetCollection<Deck>().Delete(GetDeck(deckHash).Id);
         }
+
+        public void Update(Deck deck)
+        {
+            db.GetCollection<Deck>().Update(deck);
+        }
     }
 }

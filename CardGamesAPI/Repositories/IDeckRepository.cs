@@ -9,5 +9,6 @@ namespace CardGamesAPI.Repositories
         void Insert(Deck deck);
         Deck GetDeck(string deckHash);
         void Remove(string deckHash);
+        void Update(Deck deck);
     }
 }
