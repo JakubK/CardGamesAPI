@@ -8,7 +8,9 @@ namespace CardGamesAPI.Tests
     public class CardsHelperTests
     {
         [Test]
-        public void Draw_Top_ReturnsProperCards()
+        [TestCase(CollectionDirection.Top, "X")]
+        [TestCase(CollectionDirection.Bottom, "Z")]
+        public void Draw_TopBottom_ReturnsProperCards(CollectionDirection direction, string expectedName)
         {
             var cardsHelper = new CardsHelper();
             var cards = new List<Card>()
@@ -18,13 +20,15 @@ namespace CardGamesAPI.Tests
                 new Card{Name= "Z"}
             };
 
-            var afterDraw = cardsHelper.Draw(CollectionDirection.Top,cards, 1);
+            var afterDraw = cardsHelper.Draw(direction,cards, 1);
             Assert.That(afterDraw.Count == 1);
-            Assert.That(afterDraw[0].Name == "X");
+            Assert.That(afterDraw[0].Name == expectedName);
         }
 
         [Test]
-        public void Draw_Top_MutatesGivenCollection()
+        [TestCase(CollectionDirection.Bottom)]
+        [TestCase(CollectionDirection.Top)]
+        public void Draw_TopBottom_MutatesGivenCollection(CollectionDirection direction)
         {
             var cardsHelper = new CardsHelper();
             var cards = new List<Card>()
@@ -34,12 +38,14 @@ namespace CardGamesAPI.Tests
                 new Card{Name= "Z"}
             };
 
-            var afterDraw = cardsHelper.Draw(CollectionDirection.Top,cards, 1);
+            var afterDraw = cardsHelper.Draw(direction,cards, 1);
             Assert.That(cards.Count == 2);
         }
 
         [Test]
-        public void Draw_Top_WhenNoParamGiven_DrawsOne()
+        [TestCase(CollectionDirection.Bottom)]
+        [TestCase(CollectionDirection.Top)]
+        public void Draw_TopBottom_WhenNoParamGiven_DrawsOne(CollectionDirection direction)
         {
             var cardsHelper = new CardsHelper();
             var cards = new List<Card>()
@@ -49,13 +55,14 @@ namespace CardGamesAPI.Tests
                 new Card{Name= "Z"}
             };
 
-            var afterDraw = cardsHelper.Draw(CollectionDirection.Top,cards);
+            var afterDraw = cardsHelper.Draw(direction,cards);
             Assert.That(afterDraw.Count == 1);
-            Assert.That(afterDraw[0].Name == "X");
         }
 
         [Test]
-        public void Draw_Top_WhenCountIsMoreThanAvailable_ReturnsSubset()
+        [TestCase(CollectionDirection.Bottom)]
+        [TestCase(CollectionDirection.Top)]
+        public void Draw_TopBottom_WhenCountIsMoreThanAvailable_ReturnsEverything(CollectionDirection direction)
         {
             var cardsHelper = new CardsHelper();
             var cards = new List<Card>()
@@ -65,70 +72,7 @@ namespace CardGamesAPI.Tests
                 new Card{Name= "Z"}
             };
 
-            var afterDraw = cardsHelper.Draw(CollectionDirection.Top,cards, 4);
-            Assert.That(afterDraw.Count == 3);
-        }
-
-        //FromBottom
-        [Test]
-        public void Draw_Bottom_ReturnsProperCards()
-        {
-            var cardsHelper = new CardsHelper();
-            var cards = new List<Card>()
-            {
-                new Card{Name= "X"},
-                new Card{Name= "Y"},
-                new Card{Name= "Z"}
-            };
-
-            var afterDraw = cardsHelper.Draw(CollectionDirection.Bottom,cards, 1);
-            Assert.That(afterDraw.Count == 1);
-            Assert.That(afterDraw[0].Name == "Z");
-        }
-
-        [Test]
-        public void Draw_Bottom_MutatesGivenCollection()
-        {
-            var cardsHelper = new CardsHelper();
-            var cards = new List<Card>()
-            {
-                new Card{Name= "X"},
-                new Card{Name= "Y"},
-                new Card{Name= "Z"}
-            };
-
-            var afterDraw = cardsHelper.Draw(CollectionDirection.Bottom,cards, 1);
-            Assert.That(cards.Count == 2);
-        }
-
-        [Test]
-        public void Draw_Bottom_WhenNoParamGiven_DrawsOne()
-        {
-            var cardsHelper = new CardsHelper();
-            var cards = new List<Card>()
-            {
-                new Card{Name= "X"},
-                new Card{Name= "Y"},
-                new Card{Name= "Z"}
-            };
-
-            var afterDraw = cardsHelper.Draw(CollectionDirection.Bottom,cards);
-            Assert.That(afterDraw.Count == 1);
-            Assert.That(afterDraw[0].Name == "Z");
-        }
-
-        [Test]
-        public void Draw_Bottom_WhenCountIsMoreThanAvailable_ReturnsSubset()
-        {
-            var cardsHelper = new CardsHelper();
-            var cards = new List<Card>()
-            {
-                new Card{Name= "X"},
-                new Card{Name= "Y"},
-                new Card{Name= "Z"}
-            };
-
-            var afterDraw = cardsHelper.Draw(CollectionDirection.Top,cards, 4);
+            var afterDraw = cardsHelper.Draw(direction,cards, 4);
             Assert.That(afterDraw.Count == 3);
         }
 
