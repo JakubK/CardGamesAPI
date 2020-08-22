@@ -24,7 +24,9 @@ namespace CardGamesAPI.Services
             if(count > deck.Cards.Count)
                 count = deck.Cards.Count;
 
-            var cards = deck.Cards.Take(count).ToList();
+            var cards = deck.Cards
+                .Take(count)
+                .ToList();
 
             deck.Cards.RemoveRange(0,count);
             deckRepository.Update(deck);
@@ -51,6 +53,24 @@ namespace CardGamesAPI.Services
             deckRepository.Update(deck);
             
             return cards;
+        }
+
+        public List<Card> InsertTop(string deckHash, Card cardToInsert)
+        {
+            var deck = deckRepository.GetDeck(deckHash);
+            deck.Cards.Insert(0,cardToInsert);
+
+            deckRepository.Update(deck);
+            return deck.Cards;
+        }
+
+        public List<Card> InsertBottom(string deckHash, Card cardToInsert)
+        {
+            var deck = deckRepository.GetDeck(deckHash);
+            deck.Cards.Add(cardToInsert);
+            
+            deckRepository.Update(deck);
+            return deck.Cards;
         }
     }
 }

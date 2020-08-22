@@ -24,8 +24,8 @@ namespace CardGamesAPI.Tests
                 });
             
             var deckHash = "deckHask";
-            var decksService = new CardsInterractor(deckRepositoryMock.Object);
-            var cards = decksService.DrawFromTop(deckHash,count);
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cards = cardsInterractor.DrawFromTop(deckHash,count);
 
             Assert.That(cards.Count == count);
         }
@@ -42,8 +42,8 @@ namespace CardGamesAPI.Tests
                 });
             
             var deckHash = "deckHask";
-            var decksService = new CardsInterractor(deckRepositoryMock.Object);
-            var cards = decksService.DrawFromTop(deckHash,2);
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cards = cardsInterractor.DrawFromTop(deckHash,2);
 
             Assert.That(cards[0].Name == "A");
             Assert.That(cards[1].Name == "B");
@@ -61,8 +61,8 @@ namespace CardGamesAPI.Tests
                 });
             
             var deckHash = "deckHask";
-            var decksService = new CardsInterractor(deckRepositoryMock.Object);
-            var cards = decksService.DrawFromTop(deckHash);
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cards = cardsInterractor.DrawFromTop(deckHash);
 
             Assert.That(cards.Count == 1);
         }
@@ -74,8 +74,8 @@ namespace CardGamesAPI.Tests
         {
             var deckRepositoryMock = new Mock<IDeckRepository>();   
             var deckHash = "deckHask";
-            var decksService = new CardsInterractor(deckRepositoryMock.Object);
-            var cards = decksService.DrawFromTop(deckHash, count);
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cards = cardsInterractor.DrawFromTop(deckHash, count);
 
             Assert.That(cards.Count == 0);
         }
@@ -94,8 +94,8 @@ namespace CardGamesAPI.Tests
                 });
             
             var deckHash = "deckHask";
-            var decksService = new CardsInterractor(deckRepositoryMock.Object);
-            var cards = decksService.DrawFromTop(deckHash,count);
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cards = cardsInterractor.DrawFromTop(deckHash,count);
 
             Assert.That(cards.Count == 3);
         }
@@ -117,8 +117,8 @@ namespace CardGamesAPI.Tests
                 });
             
             var deckHash = "deckHask";
-            var decksService = new CardsInterractor(deckRepositoryMock.Object);
-            var cards = decksService.DrawFromBottom(deckHash,count);
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cards = cardsInterractor.DrawFromBottom(deckHash,count);
 
             Assert.That(cards.Count == count);
         }
@@ -135,8 +135,8 @@ namespace CardGamesAPI.Tests
                 });
             
             var deckHash = "deckHask";
-            var decksService = new CardsInterractor(deckRepositoryMock.Object);
-            var cards = decksService.DrawFromBottom(deckHash,2);
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cards = cardsInterractor.DrawFromBottom(deckHash,2);
 
             Assert.That(cards[0].Name == "C");
             Assert.That(cards[1].Name == "B");
@@ -154,8 +154,8 @@ namespace CardGamesAPI.Tests
                 });
             
             var deckHash = "deckHask";
-            var decksService = new CardsInterractor(deckRepositoryMock.Object);
-            var cards = decksService.DrawFromBottom(deckHash);
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cards = cardsInterractor.DrawFromBottom(deckHash);
 
             Assert.That(cards.Count == 1);
         }
@@ -167,8 +167,8 @@ namespace CardGamesAPI.Tests
         {
             var deckRepositoryMock = new Mock<IDeckRepository>();   
             var deckHash = "deckHask";
-            var decksService = new CardsInterractor(deckRepositoryMock.Object);
-            var cards = decksService.DrawFromBottom(deckHash, count);
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cards = cardsInterractor.DrawFromBottom(deckHash, count);
 
             Assert.That(cards.Count == 0);
         }
@@ -187,10 +187,48 @@ namespace CardGamesAPI.Tests
                 });
             
             var deckHash = "deckHask";
-            var decksService = new CardsInterractor(deckRepositoryMock.Object);
-            var cards = decksService.DrawFromBottom(deckHash,count);
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cards = cardsInterractor.DrawFromBottom(deckHash,count);
 
             Assert.That(cards.Count == 3);
+        }
+
+        [Test]
+        public void InsertTop__MutatesCollectionProperly()
+        {
+            var deckRepositoryMock = new Mock<IDeckRepository>();
+            deckRepositoryMock.Setup(x => x.GetDeck(It.IsAny<string>()))
+                .Returns(new Deck{
+                    Cards = new List<Card>{
+                        new Card(), new Card(), new Card()
+                    }
+                });
+            
+            var deckHash = "deckHask";
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cardToInsert = new Card{ Name = "X"};
+            var postset = cardsInterractor.InsertTop(deckHash, cardToInsert);
+
+            Assert.That(postset[0].Name == cardToInsert.Name);
+        }
+
+        [Test]
+        public void InsertBottom__MutatesCollectionProperly()
+        {
+            var deckRepositoryMock = new Mock<IDeckRepository>();
+            deckRepositoryMock.Setup(x => x.GetDeck(It.IsAny<string>()))
+                .Returns(new Deck{
+                    Cards = new List<Card>{
+                        new Card(), new Card(), new Card()
+                    }
+                });
+            
+            var deckHash = "deckHask";
+            var cardsInterractor = new CardsInterractor(deckRepositoryMock.Object);
+            var cardToInsert = new Card{ Name = "X"};
+            var postset = cardsInterractor.InsertBottom(deckHash, cardToInsert);
+
+            Assert.That(postset[3].Name == cardToInsert.Name);
         }
     }
 }
