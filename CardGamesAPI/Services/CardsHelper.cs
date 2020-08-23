@@ -5,7 +5,7 @@ using CardGamesAPI.Models;
 
 namespace CardGamesAPI.Services
 {
-    public class CardsHelper
+    public class CardsHelper : ICardsHelper
     {
         public List<Card> Draw(CollectionDirection direction, List<Card> cards, int count = 1)
         {
