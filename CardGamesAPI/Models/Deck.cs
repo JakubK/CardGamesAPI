@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using LiteDB;
 
 namespace CardGamesAPI.Models
@@ -8,7 +9,7 @@ namespace CardGamesAPI.Models
       public int Id {get;set;}
       public string Hash {get;set;}
       public int Remaining {get;set;}
-      public Card[] Cards {get;set;}
-      public Pile[] Piles {get;set;}
+      public List<Card> Cards {get;set;}
+      public List<Pile> Piles {get;set;}
     }
 }
