@@ -1,10 +1,10 @@
-using LiteDB;
+using System.Collections.Generic;
 
 namespace CardGamesAPI.Models
 {
     public class Pile
     {
         public string Name {get;set;}
-        public Card[] Cards {get;set;}
+        public List<Card> Cards {get;set;}
     }
 }
