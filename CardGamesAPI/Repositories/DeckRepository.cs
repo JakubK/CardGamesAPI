@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using CardGamesAPI.Data;
 using CardGamesAPI.Exceptions;
 using CardGamesAPI.Models;
+using HashidsNet;
 using LiteDB;
 
 namespace CardGamesAPI.Repositories
@@ -9,9 +10,11 @@ namespace CardGamesAPI.Repositories
     public class DeckRepository : IDeckRepository
     {
         LiteDatabase db;
-        public DeckRepository(ILiteDbContext context)
+        IHashids _hashids;
+        public DeckRepository(ILiteDbContext context, IHashids hashids)
         {
             db = context.Database;
+            _hashids = hashids;
         }
         public IEnumerable<Deck> GetDecks()
         {      
@@ -21,6 +24,7 @@ namespace CardGamesAPI.Repositories
         public void Insert(Deck deck)
         {
             db.GetCollection<Deck>().Insert(deck);
+            deck.Hash = _hashids.Encode(deck.Id);
         }
 
         public Deck GetDeck(string deckHash)
