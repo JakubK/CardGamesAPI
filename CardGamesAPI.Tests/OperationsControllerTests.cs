@@ -15,12 +15,14 @@ namespace CardGamesAPI.Tests
             var deckRepositoryMock = new Mock<IDeckRepository>();
             var controller = new OperationsController(deckRepositoryMock.Object);
             var actionResult = controller.CreateDeck().Result as OkObjectResult;
-            Assert.NotNull(actionResult.Value);
+
+            var deck = (Deck)actionResult.Value;
+            Assert.NotNull(deck);
         }
 
         [Test]
         [TestCase("hash")]
-        public void GetDeck_ReturnsDeckWithGivenHash(string hash)
+        public void GetDeck_ReturnsDeckWithGivenHash_IfItExists(string hash)
         {
             var deckRepositoryMock = new Mock<IDeckRepository>();
             deckRepositoryMock.Setup(x => x.GetDeck(hash)).Returns(new Deck{
