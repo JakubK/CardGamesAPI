@@ -58,10 +58,10 @@ namespace CardGamesAPI.Tests
         {
             var deckHash = "deckHash";
             var hashidsMock = new Mock<IHashids>();
+            hashidsMock.Setup(x => x.Encode(It.IsAny<int>())).Returns(deckHash);
             var deckRepository = new DeckRepository(DbContextFactory.Create(), hashidsMock.Object);            
-            deckRepository.Insert(new Deck {
-                Hash = deckHash
-            });
+            deckRepository.Insert(new Deck());
+
             var deck = deckRepository.GetDeck(deckHash);
             Assert.That(deck.Hash == deckHash);
         }
@@ -82,11 +82,12 @@ namespace CardGamesAPI.Tests
         {
             var deckHash = "deckHash";
             var hashidsMock = new Mock<IHashids>();
-            var deckRepository = new DeckRepository(DbContextFactory.Create(), hashidsMock.Object);            
-            deckRepository.Insert(new Deck{
-                Hash = deckHash
-            });
+            hashidsMock.Setup(x => x.Encode(It.IsAny<int>())).Returns(deckHash);
+            var deckRepository = new DeckRepository(DbContextFactory.Create(), hashidsMock.Object);          
+
+            deckRepository.Insert(new Deck{});
             deckRepository.Remove(deckHash);
+
             Assert.That(deckRepository.GetDecks().Count() == 0);
         }
 
@@ -113,10 +114,9 @@ namespace CardGamesAPI.Tests
         {
             var deckHash = "deckHash";
             var hashidsMock = new Mock<IHashids>();
+            hashidsMock.Setup(x => x.Encode(It.IsAny<int>())).Returns(deckHash);
             var deckRepository = new DeckRepository(DbContextFactory.Create(), hashidsMock.Object);
-            deckRepository.Insert(new Deck{
-                Hash = deckHash
-            });
+            deckRepository.Insert(new Deck());
 
             var deck = deckRepository.GetDeck(deckHash);
             deck.Remaining = 21;

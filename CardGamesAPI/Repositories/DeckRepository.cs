@@ -23,8 +23,8 @@ namespace CardGamesAPI.Repositories
 
         public void Insert(Deck deck)
         {
-            db.GetCollection<Deck>().Insert(deck);
             deck.Hash = _hashids.Encode(deck.Id);
+            db.GetCollection<Deck>().Insert(deck);
         }
 
         public Deck GetDeck(string deckHash)
