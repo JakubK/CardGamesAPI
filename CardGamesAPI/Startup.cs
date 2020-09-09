@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using CardGamesAPI.Data;
 using CardGamesAPI.Repositories;
+using CardGamesAPI.Services;
 using HashidsNet;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,6 +32,9 @@ namespace CardGamesAPI
         {
             services.AddAutoMapper(typeof(Startup));
             services.AddTransient<IHashids>(hashids => new Hashids("randomSalt",7));
+            services.AddTransient<IDeckCardsInterractor,DeckCardsInterractor>();
+            services.AddTransient<ICardsFactory,CardsFactory>();
+            services.AddTransient<ICardsHelper,CardsHelper>();
             services.AddSingleton<ILiteDbContext>(ctx => new LiteDbContext("Filename=database.db"));
             services.AddSingleton<IDeckRepository,DeckRepository>();
             services.AddControllers();
