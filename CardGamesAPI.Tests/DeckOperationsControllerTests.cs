@@ -22,7 +22,7 @@ namespace CardGamesAPI.Tests
             var deckCardsInterractorMock = new Mock<IDeckCardsInterractor>();
             var controller = new DeckOperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
 
-            var actionResult = controller.CreateDeck().Result as OkObjectResult;
+            var actionResult = controller.CreateDeck(52).Result as OkObjectResult;
 
             var createDeckResponse = (CreateDeckResponse)actionResult.Value;
             Assert.NotNull(createDeckResponse);

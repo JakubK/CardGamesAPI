@@ -25,10 +25,10 @@ namespace CardGamesAPI.Controllers
             _deckCardsInterractor = deckCardsInterractor;
         }
 
-        [HttpPost]
-        public ActionResult<CreateDeckResponse> CreateDeck()
+        [HttpPost("{count}")]
+        public ActionResult<CreateDeckResponse> CreateDeck(int count)
         {
-            var deck = new Deck();
+            var deck = _deckCardsInterractor.Create(count);
             _deckRepository.Insert(deck);
             return Ok(_mapper.Map<CreateDeckResponse>(deck));
         }
