@@ -18,8 +18,9 @@ namespace CardGamesAPI.Tests
             var repositoryMock = new Mock<IDeckRepository>();
             repositoryMock.Setup(x => x.GetDeck(It.IsAny<string>()))
                 .Returns(new Deck());
+            var cardsFactoryMock = new Mock<ICardsFactory>();
 
-            var interractor = new DeckCardsInterractor(repositoryMock.Object, helperMock.Object);
+            var interractor = new DeckCardsInterractor(repositoryMock.Object, helperMock.Object, cardsFactoryMock.Object);
 
             interractor.Draw(direction,It.IsAny<string>(),1);
 
@@ -37,8 +38,9 @@ namespace CardGamesAPI.Tests
             var repositoryMock = new Mock<IDeckRepository>();
             repositoryMock.Setup(x => x.GetDeck(It.IsAny<string>()))
                 .Returns(new Deck());
+            var cardsFactoryMock = new Mock<ICardsFactory>();
 
-            var interractor = new DeckCardsInterractor(repositoryMock.Object, helperMock.Object);
+            var interractor = new DeckCardsInterractor(repositoryMock.Object, helperMock.Object, cardsFactoryMock.Object);
 
             interractor.Insert(It.IsAny<string>(),direction, new Card());
 
@@ -55,8 +57,9 @@ namespace CardGamesAPI.Tests
             var repositoryMock = new Mock<IDeckRepository>();
             repositoryMock.Setup(x => x.GetDeck(It.IsAny<string>()))
                 .Returns(new Deck());
+            var cardsFactoryMock = new Mock<ICardsFactory>();
 
-            var interractor = new DeckCardsInterractor(repositoryMock.Object, helperMock.Object);
+            var interractor = new DeckCardsInterractor(repositoryMock.Object, helperMock.Object, cardsFactoryMock.Object);
 
             interractor.Shuffle(It.IsAny<string>());
 
