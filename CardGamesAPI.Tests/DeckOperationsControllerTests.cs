@@ -1,4 +1,5 @@
 using AutoMapper;
+using CardGamesAPI.Contracts.Requests;
 using CardGamesAPI.Contracts.Responses;
 using CardGamesAPI.Controllers;
 using CardGamesAPI.Models;
@@ -78,7 +79,12 @@ namespace CardGamesAPI.Tests
             });
 
             var controller = new DeckOperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
-            var result = controller.Draw(hash, direction, count);
+            var request = new DeckDrawRequest{
+                Hash = hash,
+                Direction = direction,
+                Count = count
+            };
+            var result = controller.Draw(request);
             
             Assert.IsInstanceOf<OkObjectResult>(result);
             deckCardsInterractorMock.Verify(x => x.Draw(direction,hash,count));
@@ -97,7 +103,12 @@ namespace CardGamesAPI.Tests
             });
 
             var controller = new DeckOperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
-            var result = controller.Insert(hash, direction, It.IsAny<Card>());
+            var request = new DeckCardInsertRequest{
+                Hash = hash,
+                Direction = direction,
+                Card = It.IsAny<Card>()
+            };
+            var result = controller.Insert(request);
             
             Assert.IsInstanceOf<OkResult>(result);
             deckCardsInterractorMock.Verify(x => x.Insert(hash,direction,It.IsAny<Card>()));

@@ -1,4 +1,5 @@
 using AutoMapper;
+using CardGamesAPI.Contracts.Requests;
 using CardGamesAPI.Contracts.Responses;
 using CardGamesAPI.Models;
 using CardGamesAPI.Repositories;
@@ -30,13 +31,17 @@ namespace CardGamesAPI.Controllers
         {
             var deck = _deckCardsInterractor.Create(count);
             _deckRepository.Insert(deck);
-            return Ok(_mapper.Map<CreateDeckResponse>(deck));
+
+            var response =  _mapper.Map<CreateDeckResponse>(deck);
+            response.Remaining = deck.Cards.Count;
+
+            return Ok(response);
         }
 
         [HttpPut]
-        public ActionResult Insert(string hash, CollectionDirection direction, Card card)
+        public ActionResult Insert([FromBody]DeckCardInsertRequest request)
         {
-            _deckCardsInterractor.Insert(hash, direction, card);
+            _deckCardsInterractor.Insert(request.Hash, request.Direction, request.Card);
             return Ok();
         }
 
@@ -53,11 +58,10 @@ namespace CardGamesAPI.Controllers
             return Ok();
         }
 
-        [HttpPut("draw/{hash}/{direction}/{count}")]
-        public ActionResult Draw(string hash, CollectionDirection direction, int count)
+        [HttpPut("draw")]
+        public ActionResult Draw([FromBody]DeckDrawRequest request)
         {
-            var cards = _deckCardsInterractor.Draw(direction,hash,count);
-            return Ok(cards);
+            return Ok(_deckCardsInterractor.Draw(request.Direction,request.Hash,request.Count));
         }
     } 
 }
