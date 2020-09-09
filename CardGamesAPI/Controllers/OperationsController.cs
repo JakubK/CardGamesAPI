@@ -52,5 +52,12 @@ namespace CardGamesAPI.Controllers
             var cards = _deckCardsInterractor.Draw(direction,hash,count);
             return Ok(cards);
         }
+        
+        [HttpPut]
+        public ActionResult Insert(string hash, CollectionDirection direction, Card card)
+        {
+            _deckCardsInterractor.Insert(hash, direction, card);
+            return Ok();
+        }
     } 
 }

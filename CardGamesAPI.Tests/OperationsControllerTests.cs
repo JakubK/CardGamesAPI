@@ -83,5 +83,24 @@ namespace CardGamesAPI.Tests
             Assert.IsInstanceOf<OkObjectResult>(result);
             deckCardsInterractorMock.Verify(x => x.Draw(direction,hash,count));
         }
+
+        [Test]
+        [TestCase("hash", CollectionDirection.Bottom)]
+        [TestCase("hash", CollectionDirection.Top)]
+        public void Insert_CallsInterractor(string hash, CollectionDirection direction)
+        {
+            var mapperMock = new Mock<IMapper>();
+            var deckCardsInterractorMock = new Mock<IDeckCardsInterractor>();
+            var deckRepositoryMock = new Mock<IDeckRepository>();
+            deckRepositoryMock.Setup(x => x.GetDeck(hash)).Returns(new Deck{
+                Hash = hash
+            });
+
+            var controller = new OperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
+            var result = controller.Insert(hash, direction, It.IsAny<Card>());
+            
+            Assert.IsInstanceOf<OkResult>(result);
+            deckCardsInterractorMock.Verify(x => x.Insert(hash,direction,It.IsAny<Card>()));
+        }
     }
 }
