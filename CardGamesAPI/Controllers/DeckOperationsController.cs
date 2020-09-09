@@ -10,13 +10,13 @@ namespace CardGamesAPI.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class OperationsController : ControllerBase
+    public class DeckOperationsController : ControllerBase
     {
         IDeckRepository _deckRepository;
         IMapper _mapper;
         IDeckCardsInterractor _deckCardsInterractor;
 
-        public OperationsController(
+        public DeckOperationsController(
             IDeckRepository deckRepository,
             IMapper mapper,
             IDeckCardsInterractor deckCardsInterractor)

@@ -10,7 +10,7 @@ using NUnit.Framework;
 
 namespace CardGamesAPI.Tests
 {
-    public class OperationsControllerTests
+    public class DeckOperationsControllerTests
     {
         [Test]
         public void CreateDeck_ReturnsDeck()
@@ -20,7 +20,7 @@ namespace CardGamesAPI.Tests
                 .Returns(new CreateDeckResponse());
             var deckRepositoryMock = new Mock<IDeckRepository>();
             var deckCardsInterractorMock = new Mock<IDeckCardsInterractor>();
-            var controller = new OperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
+            var controller = new DeckOperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
 
             var actionResult = controller.CreateDeck().Result as OkObjectResult;
 
@@ -39,7 +39,7 @@ namespace CardGamesAPI.Tests
                 Hash = hash
             });
             
-            var controller = new OperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
+            var controller = new DeckOperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
             var actionResult = controller.GetDeck(hash).Result as OkObjectResult;
             var deck = (Deck)actionResult.Value;
 
@@ -58,7 +58,7 @@ namespace CardGamesAPI.Tests
                 Hash = hash
             });
             
-            var controller = new OperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
+            var controller = new DeckOperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
             var result = controller.ShuffleDeck(hash);
 
             deckCardsInterractorMock.Verify(x => x.Shuffle(hash));
@@ -77,7 +77,7 @@ namespace CardGamesAPI.Tests
                 Hash = hash
             });
 
-            var controller = new OperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
+            var controller = new DeckOperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
             var result = controller.Draw(hash, direction, count);
             
             Assert.IsInstanceOf<OkObjectResult>(result);
@@ -96,7 +96,7 @@ namespace CardGamesAPI.Tests
                 Hash = hash
             });
 
-            var controller = new OperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
+            var controller = new DeckOperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
             var result = controller.Insert(hash, direction, It.IsAny<Card>());
             
             Assert.IsInstanceOf<OkResult>(result);
