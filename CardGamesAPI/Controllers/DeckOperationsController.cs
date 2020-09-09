@@ -1,4 +1,3 @@
-using System;
 using AutoMapper;
 using CardGamesAPI.Contracts.Responses;
 using CardGamesAPI.Models;
@@ -8,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CardGamesAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/deck")]
     [ApiController]
     public class DeckOperationsController : ControllerBase
     {
@@ -34,30 +33,31 @@ namespace CardGamesAPI.Controllers
             return Ok(_mapper.Map<CreateDeckResponse>(deck));
         }
 
+        [HttpPut]
+        public ActionResult Insert(string hash, CollectionDirection direction, Card card)
+        {
+            _deckCardsInterractor.Insert(hash, direction, card);
+            return Ok();
+        }
+
         [HttpGet("{hash}")]
         public ActionResult<Deck> GetDeck([FromRoute]string hash)
         {
             return Ok(_deckRepository.GetDeck(hash));
         }
 
-        [HttpPut("{hash}")]
+        [HttpPut("shuffle/{hash}")]
         public ActionResult ShuffleDeck([FromRoute]string hash)
         {
             _deckCardsInterractor.Shuffle(hash);
             return Ok();
         }
-        [HttpPut]
+
+        [HttpPut("draw/{hash}/{direction}/{count}")]
         public ActionResult Draw(string hash, CollectionDirection direction, int count)
         {
             var cards = _deckCardsInterractor.Draw(direction,hash,count);
             return Ok(cards);
-        }
-        
-        [HttpPut]
-        public ActionResult Insert(string hash, CollectionDirection direction, Card card)
-        {
-            _deckCardsInterractor.Insert(hash, direction, card);
-            return Ok();
         }
     } 
 }
