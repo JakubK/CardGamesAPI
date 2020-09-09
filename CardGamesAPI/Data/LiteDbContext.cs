@@ -12,5 +12,10 @@ namespace CardGamesAPI.Data
         {
             Database = new LiteDatabase(new MemoryStream());
         }
+
+        public LiteDbContext(string connectionString)
+        {
+            Database = new LiteDatabase(connectionString);
+        }
     }
 }

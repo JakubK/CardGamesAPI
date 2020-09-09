@@ -4,7 +4,7 @@ using CardGamesAPI.Repositories;
 
 namespace CardGamesAPI.Services
 {
-    public class DeckCardsInterractor
+    public class DeckCardsInterractor : IDeckCardsInterractor
     {
         private IDeckRepository repository;
         private ICardsHelper cardsHelper;
