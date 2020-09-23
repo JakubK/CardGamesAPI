@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace CardGamesAPI.Controllers
 {
-    [Route("api/deck")]
+    [Route("api/decks")]
     [ApiController]
     public class DeckOperationsController : ControllerBase
     {

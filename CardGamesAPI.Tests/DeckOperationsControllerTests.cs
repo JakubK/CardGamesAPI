@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AutoMapper;
 using CardGamesAPI.Contracts.Requests;
 using CardGamesAPI.Contracts.Responses;
@@ -21,6 +22,9 @@ namespace CardGamesAPI.Tests
                 .Returns(new CreateDeckResponse());
             var deckRepositoryMock = new Mock<IDeckRepository>();
             var deckCardsInterractorMock = new Mock<IDeckCardsInterractor>();
+            deckCardsInterractorMock.Setup(x => x.Create(52)).Returns(new Deck{
+                Cards = new List<Card>()
+            });
             var controller = new DeckOperationsController(deckRepositoryMock.Object, mapperMock.Object, deckCardsInterractorMock.Object);
 
             var actionResult = controller.CreateDeck(52).Result as OkObjectResult;

@@ -8,7 +8,6 @@ namespace CardGamesAPI.Services
     {
         IDeckRepository repository;
         ICardsHelper cardsHelper;
-        
         ICardsFactory _cardsFactory;
 
         public DeckCardsInterractor(IDeckRepository deckRepositoryParam, ICardsHelper cardsHelperParam, ICardsFactory cardsFactory)

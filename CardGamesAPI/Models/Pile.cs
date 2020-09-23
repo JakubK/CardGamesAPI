@@ -4,7 +4,7 @@ namespace CardGamesAPI.Models
 {
     public class Pile
     {
-        public string Name {get;set;}
-        public List<Card> Cards {get;set;}
+        public string Hash {get;set;}
+        public List<Card> Cards {get;set;} = new List<Card>();
     }
 }

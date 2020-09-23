@@ -52,11 +52,13 @@ namespace CardGamesAPI.Tests
         [Test]
         public void Shuffle_CallsHelperAndRepository()
         {
-            var cards = It.IsAny<List<Card>>();
+            var cards = new List<Card>();
             var helperMock = new Mock<ICardsHelper>();
             var repositoryMock = new Mock<IDeckRepository>();
             repositoryMock.Setup(x => x.GetDeck(It.IsAny<string>()))
-                .Returns(new Deck());
+                .Returns(new Deck{
+                    Cards = cards
+                });
             var cardsFactoryMock = new Mock<ICardsFactory>();
 
             var interractor = new DeckCardsInterractor(repositoryMock.Object, helperMock.Object, cardsFactoryMock.Object);

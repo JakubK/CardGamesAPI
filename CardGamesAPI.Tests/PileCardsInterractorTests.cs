@@ -1,14 +1,41 @@
 using System.Collections.Generic;
+using CardGamesAPI.Exceptions;
 using CardGamesAPI.Models;
 using CardGamesAPI.Repositories;
 using CardGamesAPI.Services;
+using HashidsNet;
 using Moq;
 using NUnit.Framework;
 
 namespace CardGamesAPI.Tests
 {
     public class PileCardsInterractorTests
-    {
+    {   
+        [Test]
+        public void Generate_WhenDeckFound__ReturnsEmptyPile()
+        {
+            var helperMock = new Mock<ICardsHelper>();
+            var repositoryMock = new Mock<IDeckRepository>();
+            repositoryMock.Setup(x => x.GetDeck(It.IsAny<string>()))
+                .Returns(new Deck{
+                    Piles = new List<Pile>{
+                        new Pile{
+                            Hash = "First",
+                            Cards = new List<Card>()
+                        }
+                    }
+                });
+            var hashidsMock = new Mock<IHashids>();
+
+            var interractor = new PileCardsInterractor(repositoryMock.Object, helperMock.Object, hashidsMock.Object);
+
+            var pile = interractor.Generate("hash");
+
+            Assert.NotNull(pile);
+            Assert.IsNotEmpty(pile.Hash);
+            Assert.That(pile.Cards.Count == 0);
+        }
+
         [Test]
         [TestCase(CollectionDirection.Top)]
         [TestCase(CollectionDirection.Bottom)]
@@ -20,13 +47,15 @@ namespace CardGamesAPI.Tests
                 .Returns(new Deck{
                     Piles = new List<Pile>{
                         new Pile{
-                            Name = "First",
+                            Hash = "First",
                             Cards = new List<Card>()
                         }
                     }
                 });
 
-            var interractor = new PileCardsInterractor(repositoryMock.Object, helperMock.Object);
+            var hashidsMock = new Mock<IHashids>();
+
+            var interractor = new PileCardsInterractor(repositoryMock.Object, helperMock.Object, hashidsMock.Object);
 
             interractor.Draw(direction,It.IsAny<string>(), "First",1);
 
@@ -46,13 +75,14 @@ namespace CardGamesAPI.Tests
                 .Returns(new Deck{
                     Piles = new List<Pile>{
                         new Pile{
-                            Name = "First",
+                            Hash = "First",
                             Cards = new List<Card>()
                         }
                     }
                 });
+            var hashidsMock = new Mock<IHashids>();
 
-            var interractor = new PileCardsInterractor(repositoryMock.Object, helperMock.Object);
+            var interractor = new PileCardsInterractor(repositoryMock.Object, helperMock.Object, hashidsMock.Object);
 
             interractor.Insert(It.IsAny<string>(),"First",direction, new Card());
 
@@ -71,13 +101,15 @@ namespace CardGamesAPI.Tests
                 .Returns(new Deck{
                     Piles = new List<Pile>{
                         new Pile{
-                            Name = "First",
+                            Hash = "First",
                             Cards = cards
                         }
                     }
                 });
 
-            var interractor = new PileCardsInterractor(repositoryMock.Object, helperMock.Object);
+            var hashidsMock = new Mock<IHashids>();
+
+            var interractor = new PileCardsInterractor(repositoryMock.Object, helperMock.Object, hashidsMock.Object);
 
             interractor.Shuffle(It.IsAny<string>(),"First");
 
