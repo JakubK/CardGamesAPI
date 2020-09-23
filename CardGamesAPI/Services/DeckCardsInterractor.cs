@@ -6,13 +6,22 @@ namespace CardGamesAPI.Services
 {
     public class DeckCardsInterractor : IDeckCardsInterractor
     {
-        private IDeckRepository repository;
-        private ICardsHelper cardsHelper;
+        IDeckRepository repository;
+        ICardsHelper cardsHelper;
+        ICardsFactory _cardsFactory;
 
-        public DeckCardsInterractor(IDeckRepository deckRepositoryParam, ICardsHelper cardsHelperParam)
+        public DeckCardsInterractor(IDeckRepository deckRepositoryParam, ICardsHelper cardsHelperParam, ICardsFactory cardsFactory)
         {
             repository = deckRepositoryParam;
             cardsHelper = cardsHelperParam;
+            _cardsFactory = cardsFactory;
+        }
+
+        public Deck Create(int count)
+        {
+            return new Deck{
+                Cards = _cardsFactory.Generate(count)
+            };
         }
 
         public List<Card> Draw(CollectionDirection direction, string hash, int count = 1)

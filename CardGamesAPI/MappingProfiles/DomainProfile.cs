@@ -9,6 +9,7 @@ namespace CardGamesAPI.MappingProfiles
         public DomainProfile()
         {
             CreateMap<Deck,CreateDeckResponse>();
+            CreateMap<Pile,CreatePileResponse>();
         }
     }
 }
