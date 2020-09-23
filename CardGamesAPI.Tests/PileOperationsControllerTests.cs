@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using AutoMapper;
 using CardGamesAPI.Contracts.Requests;
 using CardGamesAPI.Contracts.Responses;
@@ -33,9 +34,27 @@ namespace CardGamesAPI.Tests
             Assert.NotNull(createDeckResponse);
         }
 
-        public void GetPile_ReturnsPileWithGivenHash_IfItExists(string hash)
+        [Test]
+        public void GetPile_ReturnsPileWithGivenHash_IfItExists()
         {
-            
+            var pileCardsInterractorMock = new Mock<IPileCardsInterractor>();
+            var mapperMock = new Mock<IMapper>();
+            mapperMock.Setup(x => x.Map<CreatePileResponse>(It.IsAny<Pile>()))
+                .Returns(new CreatePileResponse());
+            var repositoryMock = new Mock<IDeckRepository>();
+            repositoryMock.Setup(x => x.GetDeck(It.IsAny<string>())).Returns(new Deck{
+                Piles = new List<Pile>{
+                    new Pile{Hash = "pileHash"}
+                }
+            });
+            var hashidsMock = new Mock<IHashids>();
+            var controller = new PileOperationsController(pileCardsInterractorMock.Object, mapperMock.Object, repositoryMock.Object, hashidsMock.Object);
+
+            var response = controller.GetPile("deckHash", "pileHash").Result as OkObjectResult;
+            var pile = (Pile)response.Value;
+
+            Assert.NotNull(pile);
+            Assert.That(pile.Hash == "pileHash");
         }
         
         [Test]
@@ -85,10 +104,30 @@ namespace CardGamesAPI.Tests
                 pileDrawRequest.PileHash,
                 pileDrawRequest.Count));
         }
-
+        
+        [Test]
+        [TestCase("deckHash", CollectionDirection.Top)]
         public void Insert_CallsInterractor(string hash, CollectionDirection direction)
         {
+            PileCardInsertRequest request = new PileCardInsertRequest{
+                DeckHash = hash,
+                Direction = direction,
+                PileHash = It.IsAny<string>(),
+                Card = It.IsAny<Card>()
+            };
+            var pileCardsInterractorMock = new Mock<IPileCardsInterractor>();
+            var mapperMock = new Mock<IMapper>();
+            mapperMock.Setup(x => x.Map<CreatePileResponse>(It.IsAny<Pile>()))
+                .Returns(new CreatePileResponse());
+            var repositoryMock = new Mock<IDeckRepository>();
+            repositoryMock.Setup(x => x.GetDeck(request.DeckHash)).Returns(new Deck());
+            var hashidsMock = new Mock<IHashids>();
+            var controller = new PileOperationsController(pileCardsInterractorMock.Object, mapperMock.Object, repositoryMock.Object, hashidsMock.Object);
 
+            var response = controller.Insert(request) as OkResult;
+
+            Assert.NotNull(response);
+            pileCardsInterractorMock.Verify(x => x.Insert(request.DeckHash, request.PileHash, request.Direction, request.Card));
         }
     }
 }

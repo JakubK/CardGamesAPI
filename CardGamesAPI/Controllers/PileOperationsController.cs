@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using AutoMapper;
 using CardGamesAPI.Contracts.Requests;
 using CardGamesAPI.Contracts.Responses;
@@ -56,6 +57,20 @@ namespace CardGamesAPI.Controllers
                 pileDrawRequest.Count);
 
             return Ok(cards);
+        }
+
+        public ActionResult Insert(PileCardInsertRequest request)
+        {
+            _pileCardsInterractor.Insert(request.DeckHash, request.PileHash, request.Direction, request.Card);
+            return Ok();
+        }
+
+        public ActionResult<Pile> GetPile(string deckHash, string hash)
+        {
+            var pile = _deckRepository
+                .GetDeck(deckHash).Piles
+                .First(x => x.Hash == hash);
+            return Ok(pile);
         }
     }
 }
