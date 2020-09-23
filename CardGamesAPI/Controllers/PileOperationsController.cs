@@ -43,12 +43,14 @@ namespace CardGamesAPI.Controllers
             return Ok(_mapper.Map<CreatePileResponse>(pile));
         }
 
+        [HttpPut("shuffle/{deckHash}/{pileHash}")]
         public ActionResult Shuffle(string deckHash, string pileHash)
         {
             _pileCardsInterractor.Shuffle(deckHash,pileHash);
             return Ok();
         }
 
+        [HttpPut("draw")]
         public ActionResult<List<Card>> Draw(PileDrawRequest pileDrawRequest)
         {
             var cards = _pileCardsInterractor.Draw(pileDrawRequest.Direction,
@@ -59,12 +61,14 @@ namespace CardGamesAPI.Controllers
             return Ok(cards);
         }
 
+        [HttpPut]
         public ActionResult Insert(PileCardInsertRequest request)
         {
             _pileCardsInterractor.Insert(request.DeckHash, request.PileHash, request.Direction, request.Card);
             return Ok();
         }
 
+        [HttpGet("{deckHash}/{hash}")]
         public ActionResult<Pile> GetPile(string deckHash, string hash)
         {
             var pile = _deckRepository
