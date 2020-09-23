@@ -2,6 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using CardGamesAPI.Data;
+using CardGamesAPI.Repositories;
+using CardGamesAPI.Services;
+using HashidsNet;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -25,6 +30,13 @@ namespace CardGamesAPI
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(Startup));
+            services.AddTransient<IHashids>(hashids => new Hashids("randomSalt",7));
+            services.AddTransient<IDeckCardsInterractor,DeckCardsInterractor>();
+            services.AddTransient<ICardsFactory,CardsFactory>();
+            services.AddTransient<ICardsHelper,CardsHelper>();
+            services.AddSingleton<ILiteDbContext>(ctx => new LiteDbContext("Filename=database.db"));
+            services.AddSingleton<IDeckRepository,DeckRepository>();
             services.AddControllers();
             services.AddSwaggerGen();
         }
