@@ -33,6 +33,7 @@ namespace CardGamesAPI
             services.AddAutoMapper(typeof(Startup));
             services.AddTransient<IHashids>(hashids => new Hashids("randomSalt",7));
             services.AddTransient<IDeckCardsInterractor,DeckCardsInterractor>();
+            services.AddTransient<IPileCardsInterractor, PileCardsInterractor>();
             services.AddTransient<ICardsFactory,CardsFactory>();
             services.AddTransient<ICardsHelper,CardsHelper>();
             services.AddSingleton<ILiteDbContext>(ctx => new LiteDbContext("Filename=database.db"));
